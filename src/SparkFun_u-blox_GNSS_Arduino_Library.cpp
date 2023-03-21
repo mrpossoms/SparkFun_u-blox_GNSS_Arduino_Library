@@ -9838,7 +9838,7 @@ bool SFE_UBLOX_GNSS::setAutoNAVPOSECEFrate(uint8_t rate, bool implicitUpdate, ui
 }
 
 // Enable automatic navigation message generation by the GNSS.
-bool SFE_UBLOX_GNSS::setAutoNAVPOSECEFcallback(void (*callbackPointer)(UBX_NAV_POSECEF_data_t, const void* userCtx), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoNAVPOSECEFcallback(void (*callbackPointer)(UBX_NAV_POSECEF_data_t, void* userCtx), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoNAVPOSECEF(true, false, maxWait);
@@ -9863,7 +9863,7 @@ bool SFE_UBLOX_GNSS::setAutoNAVPOSECEFcallback(void (*callbackPointer)(UBX_NAV_P
   return (true);
 }
 
-bool SFE_UBLOX_GNSS::setAutoNAVPOSECEFcallbackPtr(void (*callbackPointerPtr)(UBX_NAV_POSECEF_data_t *, const void*), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoNAVPOSECEFcallbackPtr(void (*callbackPointerPtr)(UBX_NAV_POSECEF_data_t *, void*), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoNAVPOSECEF(true, false, maxWait);
@@ -10031,7 +10031,7 @@ bool SFE_UBLOX_GNSS::setAutoNAVSTATUSrate(uint8_t rate, bool implicitUpdate, uin
 }
 
 // Enable automatic navigation message generation by the GNSS.
-bool SFE_UBLOX_GNSS::setAutoNAVSTATUScallback(void (*callbackPointer)(UBX_NAV_STATUS_data_t, const void* userCtx), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoNAVSTATUScallback(void (*callbackPointer)(UBX_NAV_STATUS_data_t, void* userCtx), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoNAVSTATUS(true, false, maxWait);
@@ -10056,7 +10056,7 @@ bool SFE_UBLOX_GNSS::setAutoNAVSTATUScallback(void (*callbackPointer)(UBX_NAV_ST
   return (true);
 }
 
-bool SFE_UBLOX_GNSS::setAutoNAVSTATUScallbackPtr(void (*callbackPointerPtr)(UBX_NAV_STATUS_data_t *, const void*), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoNAVSTATUScallbackPtr(void (*callbackPointerPtr)(UBX_NAV_STATUS_data_t *, void*), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoNAVSTATUS(true, false, maxWait);
@@ -10243,7 +10243,7 @@ bool SFE_UBLOX_GNSS::setAutoDOPrate(uint8_t rate, bool implicitUpdate, uint16_t 
 }
 
 // Enable automatic navigation message generation by the GNSS.
-bool SFE_UBLOX_GNSS::setAutoDOPcallback(void (*callbackPointer)(UBX_NAV_DOP_data_t, const void* userCtx), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoDOPcallback(void (*callbackPointer)(UBX_NAV_DOP_data_t, void* userCtx), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoDOP(true, false, maxWait);
@@ -10268,7 +10268,7 @@ bool SFE_UBLOX_GNSS::setAutoDOPcallback(void (*callbackPointer)(UBX_NAV_DOP_data
   return (true);
 }
 
-bool SFE_UBLOX_GNSS::setAutoDOPcallbackPtr(void (*callbackPointerPtr)(UBX_NAV_DOP_data_t *, const void*), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoDOPcallbackPtr(void (*callbackPointerPtr)(UBX_NAV_DOP_data_t *, void*), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoDOP(true, false, maxWait);
@@ -10442,7 +10442,7 @@ bool SFE_UBLOX_GNSS::setAutoNAVEOErate(uint8_t rate, bool implicitUpdate, uint16
 }
 
 // Enable automatic navigation message generation by the GNSS.
-bool SFE_UBLOX_GNSS::setAutoNAVEOEcallbackPtr(void (*callbackPointerPtr)(UBX_NAV_EOE_data_t *, const void*), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoNAVEOEcallbackPtr(void (*callbackPointerPtr)(UBX_NAV_EOE_data_t *, void*), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoNAVEOE(true, false, maxWait);
@@ -10615,7 +10615,7 @@ bool SFE_UBLOX_GNSS::setAutoNAVATTrate(uint8_t rate, bool implicitUpdate, uint16
 }
 
 // Enable automatic navigation message generation by the GNSS.
-bool SFE_UBLOX_GNSS::setAutoNAVATTcallback(void (*callbackPointer)(UBX_NAV_ATT_data_t, const void* userCtx), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoNAVATTcallback(void (*callbackPointer)(UBX_NAV_ATT_data_t, void* userCtx), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoNAVATT(true, false, maxWait);
@@ -10640,7 +10640,7 @@ bool SFE_UBLOX_GNSS::setAutoNAVATTcallback(void (*callbackPointer)(UBX_NAV_ATT_d
   return (true);
 }
 
-bool SFE_UBLOX_GNSS::setAutoNAVATTcallbackPtr(void (*callbackPointerPtr)(UBX_NAV_ATT_data_t *, const void*), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoNAVATTcallbackPtr(void (*callbackPointerPtr)(UBX_NAV_ATT_data_t *, void*), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoNAVATT(true, false, maxWait);
@@ -10831,7 +10831,7 @@ bool SFE_UBLOX_GNSS::setAutoPVTrate(uint8_t rate, bool implicitUpdate, uint16_t 
 }
 
 // Enable automatic navigation message generation by the GNSS. This changes the way getPVT works.
-bool SFE_UBLOX_GNSS::setAutoPVTcallback(void (*callbackPointer)(UBX_NAV_PVT_data_t, const void* userCtx), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoPVTcallback(void (*callbackPointer)(UBX_NAV_PVT_data_t, void* userCtx), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoPVT(true, false, maxWait);
@@ -10857,7 +10857,7 @@ bool SFE_UBLOX_GNSS::setAutoPVTcallback(void (*callbackPointer)(UBX_NAV_PVT_data
   return (true);
 }
 
-bool SFE_UBLOX_GNSS::setAutoPVTcallbackPtr(void (*callbackPointerPtr)(UBX_NAV_PVT_data_t *, const void*), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoPVTcallbackPtr(void (*callbackPointerPtr)(UBX_NAV_PVT_data_t *, void*), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoPVT(true, false, maxWait);
@@ -11027,7 +11027,7 @@ bool SFE_UBLOX_GNSS::setAutoNAVODOrate(uint8_t rate, bool implicitUpdate, uint16
 }
 
 // Enable automatic navigation message generation by the GNSS.
-bool SFE_UBLOX_GNSS::setAutoNAVODOcallback(void (*callbackPointer)(UBX_NAV_ODO_data_t, const void* userCtx), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoNAVODOcallback(void (*callbackPointer)(UBX_NAV_ODO_data_t, void* userCtx), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoNAVODO(true, false, maxWait);
@@ -11052,7 +11052,7 @@ bool SFE_UBLOX_GNSS::setAutoNAVODOcallback(void (*callbackPointer)(UBX_NAV_ODO_d
   return (true);
 }
 
-bool SFE_UBLOX_GNSS::setAutoNAVODOcallbackPtr(void (*callbackPointerPtr)(UBX_NAV_ODO_data_t *, const void*), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoNAVODOcallbackPtr(void (*callbackPointerPtr)(UBX_NAV_ODO_data_t *, void*), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoNAVODO(true, false, maxWait);
@@ -11219,7 +11219,7 @@ bool SFE_UBLOX_GNSS::setAutoNAVVELECEFrate(uint8_t rate, bool implicitUpdate, ui
 }
 
 // Enable automatic navigation message generation by the GNSS.
-bool SFE_UBLOX_GNSS::setAutoNAVVELECEFcallback(void (*callbackPointer)(UBX_NAV_VELECEF_data_t, const void* userCtx), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoNAVVELECEFcallback(void (*callbackPointer)(UBX_NAV_VELECEF_data_t, void* userCtx), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoNAVVELECEF(true, false, maxWait);
@@ -11244,7 +11244,7 @@ bool SFE_UBLOX_GNSS::setAutoNAVVELECEFcallback(void (*callbackPointer)(UBX_NAV_V
   return (true);
 }
 
-bool SFE_UBLOX_GNSS::setAutoNAVVELECEFcallbackPtr(void (*callbackPointerPtr)(UBX_NAV_VELECEF_data_t *, const void*), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoNAVVELECEFcallbackPtr(void (*callbackPointerPtr)(UBX_NAV_VELECEF_data_t *, void*), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoNAVVELECEF(true, false, maxWait);
@@ -11408,7 +11408,7 @@ bool SFE_UBLOX_GNSS::setAutoNAVVELNEDrate(uint8_t rate, bool implicitUpdate, uin
 }
 
 // Enable automatic navigation message generation by the GNSS.
-bool SFE_UBLOX_GNSS::setAutoNAVVELNEDcallback(void (*callbackPointer)(UBX_NAV_VELNED_data_t, const void* userCtx), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoNAVVELNEDcallback(void (*callbackPointer)(UBX_NAV_VELNED_data_t, void* userCtx), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoNAVVELNED(true, false, maxWait);
@@ -11433,7 +11433,7 @@ bool SFE_UBLOX_GNSS::setAutoNAVVELNEDcallback(void (*callbackPointer)(UBX_NAV_VE
   return (true);
 }
 
-bool SFE_UBLOX_GNSS::setAutoNAVVELNEDcallbackPtr(void (*callbackPointerPtr)(UBX_NAV_VELNED_data_t *, const void*), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoNAVVELNEDcallbackPtr(void (*callbackPointerPtr)(UBX_NAV_VELNED_data_t *, void*), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoNAVVELNED(true, false, maxWait);
@@ -11600,7 +11600,7 @@ bool SFE_UBLOX_GNSS::setAutoNAVHPPOSECEFrate(uint8_t rate, bool implicitUpdate, 
 }
 
 // Enable automatic navigation message generation by the GNSS.
-bool SFE_UBLOX_GNSS::setAutoNAVHPPOSECEFcallback(void (*callbackPointer)(UBX_NAV_HPPOSECEF_data_t, const void* userCtx), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoNAVHPPOSECEFcallback(void (*callbackPointer)(UBX_NAV_HPPOSECEF_data_t, void* userCtx), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoNAVHPPOSECEF(true, false, maxWait);
@@ -11625,7 +11625,7 @@ bool SFE_UBLOX_GNSS::setAutoNAVHPPOSECEFcallback(void (*callbackPointer)(UBX_NAV
   return (true);
 }
 
-bool SFE_UBLOX_GNSS::setAutoNAVHPPOSECEFcallbackPtr(void (*callbackPointerPtr)(UBX_NAV_HPPOSECEF_data_t *, const void*), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoNAVHPPOSECEFcallbackPtr(void (*callbackPointerPtr)(UBX_NAV_HPPOSECEF_data_t *, void*), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoNAVHPPOSECEF(true, false, maxWait);
@@ -11814,7 +11814,7 @@ bool SFE_UBLOX_GNSS::setAutoHPPOSLLHrate(uint8_t rate, bool implicitUpdate, uint
 }
 
 // Enable automatic navigation message generation by the GNSS.
-bool SFE_UBLOX_GNSS::setAutoHPPOSLLHcallback(void (*callbackPointer)(UBX_NAV_HPPOSLLH_data_t, const void* userCtx), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoHPPOSLLHcallback(void (*callbackPointer)(UBX_NAV_HPPOSLLH_data_t, void* userCtx), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoHPPOSLLH(true, false, maxWait);
@@ -11839,7 +11839,7 @@ bool SFE_UBLOX_GNSS::setAutoHPPOSLLHcallback(void (*callbackPointer)(UBX_NAV_HPP
   return (true);
 }
 
-bool SFE_UBLOX_GNSS::setAutoHPPOSLLHcallbackPtr(void (*callbackPointerPtr)(UBX_NAV_HPPOSLLH_data_t *, const void*), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoHPPOSLLHcallbackPtr(void (*callbackPointerPtr)(UBX_NAV_HPPOSLLH_data_t *, void*), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoHPPOSLLH(true, false, maxWait);
@@ -12006,7 +12006,7 @@ bool SFE_UBLOX_GNSS::setAutoNAVPVATrate(uint8_t rate, bool implicitUpdate, uint1
 }
 
 // Enable automatic navigation message generation by the GNSS. This changes the way getPVAT works.
-bool SFE_UBLOX_GNSS::setAutoNAVPVATcallback(void (*callbackPointer)(UBX_NAV_PVAT_data_t, const void* userCtx), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoNAVPVATcallback(void (*callbackPointer)(UBX_NAV_PVAT_data_t, void* userCtx), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoNAVPVAT(true, false, maxWait);
@@ -12032,7 +12032,7 @@ bool SFE_UBLOX_GNSS::setAutoNAVPVATcallback(void (*callbackPointer)(UBX_NAV_PVAT
   return (true);
 }
 
-bool SFE_UBLOX_GNSS::setAutoNAVPVATcallbackPtr(void (*callbackPointerPtr)(UBX_NAV_PVAT_data_t *, const void*), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoNAVPVATcallbackPtr(void (*callbackPointerPtr)(UBX_NAV_PVAT_data_t *, void*), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoNAVPVAT(true, false, maxWait);
@@ -12199,7 +12199,7 @@ bool SFE_UBLOX_GNSS::setAutoNAVTIMEUTCrate(uint8_t rate, bool implicitUpdate, ui
 }
 
 // Enable automatic navigation message generation by the GNSS.
-bool SFE_UBLOX_GNSS::setAutoNAVTIMEUTCcallbackPtr(void (*callbackPointerPtr)(UBX_NAV_TIMEUTC_data_t *, const void*), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoNAVTIMEUTCcallbackPtr(void (*callbackPointerPtr)(UBX_NAV_TIMEUTC_data_t *, void*), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoNAVTIMEUTC(true, false, maxWait);
@@ -12365,7 +12365,7 @@ bool SFE_UBLOX_GNSS::setAutoNAVCLOCKrate(uint8_t rate, bool implicitUpdate, uint
 }
 
 // Enable automatic navigation message generation by the GNSS.
-bool SFE_UBLOX_GNSS::setAutoNAVCLOCKcallback(void (*callbackPointer)(UBX_NAV_CLOCK_data_t, const void* userCtx), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoNAVCLOCKcallback(void (*callbackPointer)(UBX_NAV_CLOCK_data_t, void* userCtx), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoNAVCLOCK(true, false, maxWait);
@@ -12390,7 +12390,7 @@ bool SFE_UBLOX_GNSS::setAutoNAVCLOCKcallback(void (*callbackPointer)(UBX_NAV_CLO
   return (true);
 }
 
-bool SFE_UBLOX_GNSS::setAutoNAVCLOCKcallbackPtr(void (*callbackPointerPtr)(UBX_NAV_CLOCK_data_t *, const void*), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoNAVCLOCKcallbackPtr(void (*callbackPointerPtr)(UBX_NAV_CLOCK_data_t *, void*), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoNAVCLOCK(true, false, maxWait);
@@ -12611,7 +12611,7 @@ bool SFE_UBLOX_GNSS::setAutoNAVSVINrate(uint8_t rate, bool implicitUpdate, uint1
 }
 
 // Enable automatic navigation message generation by the GNSS.
-bool SFE_UBLOX_GNSS::setAutoNAVSVINcallbackPtr(void (*callbackPointerPtr)(UBX_NAV_SVIN_data_t *, const void*), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoNAVSVINcallbackPtr(void (*callbackPointerPtr)(UBX_NAV_SVIN_data_t *, void*), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoNAVSVIN(true, false, maxWait);
@@ -12779,7 +12779,7 @@ bool SFE_UBLOX_GNSS::setAutoNAVSATrate(uint8_t rate, bool implicitUpdate, uint16
 }
 
 // Enable automatic navigation message generation by the GNSS.
-bool SFE_UBLOX_GNSS::setAutoNAVSATcallback(void (*callbackPointer)(UBX_NAV_SAT_data_t, const void* userCtx), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoNAVSATcallback(void (*callbackPointer)(UBX_NAV_SAT_data_t, void* userCtx), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoNAVSAT(true, false, maxWait);
@@ -12804,7 +12804,7 @@ bool SFE_UBLOX_GNSS::setAutoNAVSATcallback(void (*callbackPointer)(UBX_NAV_SAT_d
   return (true);
 }
 
-bool SFE_UBLOX_GNSS::setAutoNAVSATcallbackPtr(void (*callbackPointerPtr)(UBX_NAV_SAT_data_t *, const void*), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoNAVSATcallbackPtr(void (*callbackPointerPtr)(UBX_NAV_SAT_data_t *, void*), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoNAVSAT(true, false, maxWait);
@@ -12976,7 +12976,7 @@ bool SFE_UBLOX_GNSS::setAutoRELPOSNEDrate(uint8_t rate, bool implicitUpdate, uin
 }
 
 // Enable automatic navigation message generation by the GNSS.
-bool SFE_UBLOX_GNSS::setAutoRELPOSNEDcallback(void (*callbackPointer)(UBX_NAV_RELPOSNED_data_t, const void* userCtx), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoRELPOSNEDcallback(void (*callbackPointer)(UBX_NAV_RELPOSNED_data_t, void* userCtx), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoRELPOSNED(true, false, maxWait);
@@ -13001,7 +13001,7 @@ bool SFE_UBLOX_GNSS::setAutoRELPOSNEDcallback(void (*callbackPointer)(UBX_NAV_RE
   return (true);
 }
 
-bool SFE_UBLOX_GNSS::setAutoRELPOSNEDcallbackPtr(void (*callbackPointerPtr)(UBX_NAV_RELPOSNED_data_t *, const void*), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoRELPOSNEDcallbackPtr(void (*callbackPointerPtr)(UBX_NAV_RELPOSNED_data_t *, void*), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoRELPOSNED(true, false, maxWait);
@@ -13187,7 +13187,7 @@ bool SFE_UBLOX_GNSS::setAutoAOPSTATUSrate(uint8_t rate, bool implicitUpdate, uin
 }
 
 // Enable automatic navigation message generation by the GNSS.
-bool SFE_UBLOX_GNSS::setAutoAOPSTATUScallback(void (*callbackPointer)(UBX_NAV_AOPSTATUS_data_t, const void* userCtx), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoAOPSTATUScallback(void (*callbackPointer)(UBX_NAV_AOPSTATUS_data_t, void* userCtx), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoAOPSTATUS(true, false, maxWait);
@@ -13212,7 +13212,7 @@ bool SFE_UBLOX_GNSS::setAutoAOPSTATUScallback(void (*callbackPointer)(UBX_NAV_AO
   return (true);
 }
 
-bool SFE_UBLOX_GNSS::setAutoAOPSTATUScallbackPtr(void (*callbackPointerPtr)(UBX_NAV_AOPSTATUS_data_t *, const void*), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoAOPSTATUScallbackPtr(void (*callbackPointerPtr)(UBX_NAV_AOPSTATUS_data_t *, void*), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoAOPSTATUS(true, false, maxWait);
@@ -13294,7 +13294,7 @@ void SFE_UBLOX_GNSS::logAOPSTATUS(bool enabled)
 // ***** RXM PMP automatic support
 
 // Callback receives a pointer to the data, instead of _all_ the data. Much kinder on the stack!
-bool SFE_UBLOX_GNSS::setRXMPMPcallbackPtr(void (*callbackPointer)(UBX_RXM_PMP_data_t *, const void*))
+bool SFE_UBLOX_GNSS::setRXMPMPcallbackPtr(void (*callbackPointer)(UBX_RXM_PMP_data_t *, void*))
 {
   if (packetUBXRXMPMP == NULL)
     initPacketUBXRXMPMP();     // Check that RAM has been allocated for the data
@@ -13338,7 +13338,7 @@ bool SFE_UBLOX_GNSS::initPacketUBXRXMPMP()
 }
 
 // Callback receives a pointer to the data, instead of _all_ the data. Much kinder on the stack!
-bool SFE_UBLOX_GNSS::setRXMPMPmessageCallbackPtr(void (*callbackPointer)(UBX_RXM_PMP_message_data_t *, const void*))
+bool SFE_UBLOX_GNSS::setRXMPMPmessageCallbackPtr(void (*callbackPointer)(UBX_RXM_PMP_message_data_t *, void*))
 {
   if (packetUBXRXMPMPmessage == NULL)
     initPacketUBXRXMPMPmessage();     // Check that RAM has been allocated for the data
@@ -13384,7 +13384,7 @@ bool SFE_UBLOX_GNSS::initPacketUBXRXMPMPmessage()
 // ***** RXM QZSSL6 automatic support
 
 // Callback receives a pointer to the data, instead of _all_ the data. Much kinder on the stack!
-bool SFE_UBLOX_GNSS::setRXMQZSSL6messageCallbackPtr(void (*callbackPointer)(UBX_RXM_QZSSL6_message_data_t *, const void*))
+bool SFE_UBLOX_GNSS::setRXMQZSSL6messageCallbackPtr(void (*callbackPointer)(UBX_RXM_QZSSL6_message_data_t *, void*))
 {
   if (packetUBXRXMQZSSL6message == NULL)
     initPacketUBXRXMQZSSL6message();     // Check that RAM has been allocated for the data
@@ -13427,7 +13427,7 @@ bool SFE_UBLOX_GNSS::initPacketUBXRXMQZSSL6message()
   return (true);
 }
 
-bool SFE_UBLOX_GNSS::setRXMCORcallbackPtr(void (*callbackPointer)(UBX_RXM_COR_data_t *, const void*))
+bool SFE_UBLOX_GNSS::setRXMCORcallbackPtr(void (*callbackPointer)(UBX_RXM_COR_data_t *, void*))
 {
   if (packetUBXRXMCOR == NULL)
     initPacketUBXRXMCOR();     // Check that RAM has been allocated for the data
@@ -13544,7 +13544,7 @@ bool SFE_UBLOX_GNSS::setAutoRXMSFRBXrate(uint8_t rate, bool implicitUpdate, uint
 }
 
 // Enable automatic navigation message generation by the GNSS.
-bool SFE_UBLOX_GNSS::setAutoRXMSFRBXcallback(void (*callbackPointer)(UBX_RXM_SFRBX_data_t, const void* userCtx), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoRXMSFRBXcallback(void (*callbackPointer)(UBX_RXM_SFRBX_data_t, void* userCtx), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoRXMSFRBX(true, false, maxWait);
@@ -13569,7 +13569,7 @@ bool SFE_UBLOX_GNSS::setAutoRXMSFRBXcallback(void (*callbackPointer)(UBX_RXM_SFR
   return (true);
 }
 
-bool SFE_UBLOX_GNSS::setAutoRXMSFRBXcallbackPtr(void (*callbackPointerPtr)(UBX_RXM_SFRBX_data_t *, const void*), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoRXMSFRBXcallbackPtr(void (*callbackPointerPtr)(UBX_RXM_SFRBX_data_t *, void*), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoRXMSFRBX(true, false, maxWait);
@@ -13736,7 +13736,7 @@ bool SFE_UBLOX_GNSS::setAutoRXMRAWXrate(uint8_t rate, bool implicitUpdate, uint1
 }
 
 // Enable automatic navigation message generation by the GNSS.
-bool SFE_UBLOX_GNSS::setAutoRXMRAWXcallback(void (*callbackPointer)(UBX_RXM_RAWX_data_t, const void* userCtx), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoRXMRAWXcallback(void (*callbackPointer)(UBX_RXM_RAWX_data_t, void* userCtx), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoRXMRAWX(true, false, maxWait);
@@ -13761,7 +13761,7 @@ bool SFE_UBLOX_GNSS::setAutoRXMRAWXcallback(void (*callbackPointer)(UBX_RXM_RAWX
   return (true);
 }
 
-bool SFE_UBLOX_GNSS::setAutoRXMRAWXcallbackPtr(void (*callbackPointerPtr)(UBX_RXM_RAWX_data_t *, const void*), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoRXMRAWXcallbackPtr(void (*callbackPointerPtr)(UBX_RXM_RAWX_data_t *, void*), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoRXMRAWX(true, false, maxWait);
@@ -14030,7 +14030,7 @@ bool SFE_UBLOX_GNSS::setAutoTIMTM2rate(uint8_t rate, bool implicitUpdate, uint16
 }
 
 // Enable automatic navigation message generation by the GNSS.
-bool SFE_UBLOX_GNSS::setAutoTIMTM2callback(void (*callbackPointer)(UBX_TIM_TM2_data_t, const void* userCtx), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoTIMTM2callback(void (*callbackPointer)(UBX_TIM_TM2_data_t, void* userCtx), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoTIMTM2(true, false, maxWait);
@@ -14055,7 +14055,7 @@ bool SFE_UBLOX_GNSS::setAutoTIMTM2callback(void (*callbackPointer)(UBX_TIM_TM2_d
   return (true);
 }
 
-bool SFE_UBLOX_GNSS::setAutoTIMTM2callbackPtr(void (*callbackPointerPtr)(UBX_TIM_TM2_data_t *, const void*), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoTIMTM2callbackPtr(void (*callbackPointerPtr)(UBX_TIM_TM2_data_t *, void*), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoTIMTM2(true, false, maxWait);
@@ -14251,7 +14251,7 @@ bool SFE_UBLOX_GNSS::setAutoESFALGrate(uint8_t rate, bool implicitUpdate, uint16
 }
 
 // Enable automatic navigation message generation by the GNSS.
-bool SFE_UBLOX_GNSS::setAutoESFALGcallback(void (*callbackPointer)(UBX_ESF_ALG_data_t, const void* userCtx), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoESFALGcallback(void (*callbackPointer)(UBX_ESF_ALG_data_t, void* userCtx), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoESFALG(true, false, maxWait);
@@ -14276,7 +14276,7 @@ bool SFE_UBLOX_GNSS::setAutoESFALGcallback(void (*callbackPointer)(UBX_ESF_ALG_d
   return (true);
 }
 
-bool SFE_UBLOX_GNSS::setAutoESFALGcallbackPtr(void (*callbackPointerPtr)(UBX_ESF_ALG_data_t *, const void*), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoESFALGcallbackPtr(void (*callbackPointerPtr)(UBX_ESF_ALG_data_t *, void*), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoESFALG(true, false, maxWait);
@@ -14472,7 +14472,7 @@ bool SFE_UBLOX_GNSS::setAutoESFSTATUSrate(uint8_t rate, bool implicitUpdate, uin
 }
 
 // Enable automatic navigation message generation by the GNSS.
-bool SFE_UBLOX_GNSS::setAutoESFSTATUScallback(void (*callbackPointer)(UBX_ESF_STATUS_data_t, const void* userCtx), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoESFSTATUScallback(void (*callbackPointer)(UBX_ESF_STATUS_data_t, void* userCtx), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoESFSTATUS(true, false, maxWait);
@@ -14497,7 +14497,7 @@ bool SFE_UBLOX_GNSS::setAutoESFSTATUScallback(void (*callbackPointer)(UBX_ESF_ST
   return (true);
 }
 
-bool SFE_UBLOX_GNSS::setAutoESFSTATUScallbackPtr(void (*callbackPointerPtr)(UBX_ESF_STATUS_data_t *, const void*), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoESFSTATUScallbackPtr(void (*callbackPointerPtr)(UBX_ESF_STATUS_data_t *, void*), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoESFSTATUS(true, false, maxWait);
@@ -14694,7 +14694,7 @@ bool SFE_UBLOX_GNSS::setAutoESFINSrate(uint8_t rate, bool implicitUpdate, uint16
 }
 
 // Enable automatic navigation message generation by the GNSS.
-bool SFE_UBLOX_GNSS::setAutoESFINScallback(void (*callbackPointer)(UBX_ESF_INS_data_t, const void* userCtx), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoESFINScallback(void (*callbackPointer)(UBX_ESF_INS_data_t, void* userCtx), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoESFINS(true, false, maxWait);
@@ -14719,7 +14719,7 @@ bool SFE_UBLOX_GNSS::setAutoESFINScallback(void (*callbackPointer)(UBX_ESF_INS_d
   return (true);
 }
 
-bool SFE_UBLOX_GNSS::setAutoESFINScallbackPtr(void (*callbackPointerPtr)(UBX_ESF_INS_data_t *, const void*), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoESFINScallbackPtr(void (*callbackPointerPtr)(UBX_ESF_INS_data_t *, void*), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoESFINS(true, false, maxWait);
@@ -14841,7 +14841,7 @@ bool SFE_UBLOX_GNSS::setAutoESFMEASrate(uint8_t rate, bool implicitUpdate, uint1
 }
 
 // Enable automatic navigation message generation by the GNSS.
-bool SFE_UBLOX_GNSS::setAutoESFMEAScallback(void (*callbackPointer)(UBX_ESF_MEAS_data_t, const void* userCtx), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoESFMEAScallback(void (*callbackPointer)(UBX_ESF_MEAS_data_t, void* userCtx), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoESFMEAS(true, false, maxWait);
@@ -14866,7 +14866,7 @@ bool SFE_UBLOX_GNSS::setAutoESFMEAScallback(void (*callbackPointer)(UBX_ESF_MEAS
   return (true);
 }
 
-bool SFE_UBLOX_GNSS::setAutoESFMEAScallbackPtr(void (*callbackPointerPtr)(UBX_ESF_MEAS_data_t *, const void*), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoESFMEAScallbackPtr(void (*callbackPointerPtr)(UBX_ESF_MEAS_data_t *, void*), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoESFMEAS(true, false, maxWait);
@@ -14983,7 +14983,7 @@ bool SFE_UBLOX_GNSS::setAutoESFRAWrate(uint8_t rate, bool implicitUpdate, uint16
 }
 
 // Enable automatic message generation by the GNSS.
-bool SFE_UBLOX_GNSS::setAutoESFRAWcallback(void (*callbackPointer)(UBX_ESF_RAW_data_t, const void* userCtx), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoESFRAWcallback(void (*callbackPointer)(UBX_ESF_RAW_data_t, void* userCtx), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoESFRAW(true, false, maxWait);
@@ -15008,7 +15008,7 @@ bool SFE_UBLOX_GNSS::setAutoESFRAWcallback(void (*callbackPointer)(UBX_ESF_RAW_d
   return (true);
 }
 
-bool SFE_UBLOX_GNSS::setAutoESFRAWcallbackPtr(void (*callbackPointerPtr)(UBX_ESF_RAW_data_t *, const void*), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoESFRAWcallbackPtr(void (*callbackPointerPtr)(UBX_ESF_RAW_data_t *, void*), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoESFRAW(true, false, maxWait);
@@ -15200,7 +15200,7 @@ bool SFE_UBLOX_GNSS::setAutoHNRATTrate(uint8_t rate, bool implicitUpdate, uint16
 }
 
 // Enable automatic navigation message generation by the GNSS.
-bool SFE_UBLOX_GNSS::setAutoHNRATTcallback(void (*callbackPointer)(UBX_HNR_ATT_data_t, const void* userCtx), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoHNRATTcallback(void (*callbackPointer)(UBX_HNR_ATT_data_t, void* userCtx), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoHNRATT(true, false, maxWait);
@@ -15225,7 +15225,7 @@ bool SFE_UBLOX_GNSS::setAutoHNRATTcallback(void (*callbackPointer)(UBX_HNR_ATT_d
   return (true);
 }
 
-bool SFE_UBLOX_GNSS::setAutoHNRATTcallbackPtr(void (*callbackPointerPtr)(UBX_HNR_ATT_data_t *, const void*), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoHNRATTcallbackPtr(void (*callbackPointerPtr)(UBX_HNR_ATT_data_t *, void*), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoHNRATT(true, false, maxWait);
@@ -15426,7 +15426,7 @@ bool SFE_UBLOX_GNSS::setAutoHNRINSrate(uint8_t rate, bool implicitUpdate, uint16
 }
 
 // Enable automatic navigation message generation by the GNSS.
-bool SFE_UBLOX_GNSS::setAutoHNRINScallback(void (*callbackPointer)(UBX_HNR_INS_data_t, const void* userCtx), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoHNRINScallback(void (*callbackPointer)(UBX_HNR_INS_data_t, void* userCtx), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoHNRINS(true, false, maxWait);
@@ -15451,7 +15451,7 @@ bool SFE_UBLOX_GNSS::setAutoHNRINScallback(void (*callbackPointer)(UBX_HNR_INS_d
   return (true);
 }
 
-bool SFE_UBLOX_GNSS::setAutoHNRINScallbackPtr(void (*callbackPointerPtr)(UBX_HNR_INS_data_t *, const void*), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoHNRINScallbackPtr(void (*callbackPointerPtr)(UBX_HNR_INS_data_t *, void*), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoHNRINS(true, false, maxWait);
@@ -15647,7 +15647,7 @@ bool SFE_UBLOX_GNSS::setAutoHNRPVTrate(uint8_t rate, bool implicitUpdate, uint16
 }
 
 // Enable automatic navigation message generation by the GNSS.
-bool SFE_UBLOX_GNSS::setAutoHNRPVTcallback(void (*callbackPointer)(UBX_HNR_PVT_data_t, const void* userCtx), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoHNRPVTcallback(void (*callbackPointer)(UBX_HNR_PVT_data_t, void* userCtx), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoHNRPVT(true, false, maxWait);
@@ -15672,7 +15672,7 @@ bool SFE_UBLOX_GNSS::setAutoHNRPVTcallback(void (*callbackPointer)(UBX_HNR_PVT_d
   return (true);
 }
 
-bool SFE_UBLOX_GNSS::setAutoHNRPVTcallbackPtr(void (*callbackPointerPtr)(UBX_HNR_PVT_data_t *, const void*), uint16_t maxWait)
+bool SFE_UBLOX_GNSS::setAutoHNRPVTcallbackPtr(void (*callbackPointerPtr)(UBX_HNR_PVT_data_t *, void*), uint16_t maxWait)
 {
   // Enable auto messages. Set implicitUpdate to false as we expect the user to call checkUblox manually.
   bool result = setAutoHNRPVT(true, false, maxWait);
@@ -15855,7 +15855,7 @@ uint8_t SFE_UBLOX_GNSS::getLatestNMEAGPGGA(NMEA_GGA_data_t *data)
 }
 
 // Enable a callback on the arrival of a GPGGA message
-bool SFE_UBLOX_GNSS::setNMEAGPGGAcallback(void (*callbackPointer)(NMEA_GGA_data_t, const void*))
+bool SFE_UBLOX_GNSS::setNMEAGPGGAcallback(void (*callbackPointer)(NMEA_GGA_data_t, void*))
 {
   if (storageNMEAGPGGA == NULL)
     initStorageNMEAGPGGA();     // Check that RAM has been allocated for the message
@@ -15880,7 +15880,7 @@ bool SFE_UBLOX_GNSS::setNMEAGPGGAcallback(void (*callbackPointer)(NMEA_GGA_data_
   return (true);
 }
 
-bool SFE_UBLOX_GNSS::setNMEAGPGGAcallbackPtr(void (*callbackPointerPtr)(NMEA_GGA_data_t *, const void*))
+bool SFE_UBLOX_GNSS::setNMEAGPGGAcallbackPtr(void (*callbackPointerPtr)(NMEA_GGA_data_t *, void*))
 {
   if (storageNMEAGPGGA == NULL)
     initStorageNMEAGPGGA();     // Check that RAM has been allocated for the message
@@ -15957,7 +15957,7 @@ uint8_t SFE_UBLOX_GNSS::getLatestNMEAGNGGA(NMEA_GGA_data_t *data)
   return (result);
 }
 
-bool SFE_UBLOX_GNSS::setNMEAGNGGAcallback(void (*callbackPointer)(NMEA_GGA_data_t, const void*))
+bool SFE_UBLOX_GNSS::setNMEAGNGGAcallback(void (*callbackPointer)(NMEA_GGA_data_t, void*))
 {
   if (storageNMEAGNGGA == NULL)
     initStorageNMEAGNGGA();     // Check that RAM has been allocated for the message
@@ -15982,7 +15982,7 @@ bool SFE_UBLOX_GNSS::setNMEAGNGGAcallback(void (*callbackPointer)(NMEA_GGA_data_
   return (true);
 }
 
-bool SFE_UBLOX_GNSS::setNMEAGNGGAcallbackPtr(void (*callbackPointerPtr)(NMEA_GGA_data_t *, const void*))
+bool SFE_UBLOX_GNSS::setNMEAGNGGAcallbackPtr(void (*callbackPointerPtr)(NMEA_GGA_data_t *, void*))
 {
   if (storageNMEAGNGGA == NULL)
     initStorageNMEAGNGGA();     // Check that RAM has been allocated for the message
@@ -16066,7 +16066,7 @@ uint8_t SFE_UBLOX_GNSS::getLatestNMEAGPVTG(NMEA_VTG_data_t *data)
 }
 
 // Enable a callback on the arrival of a GPVTG message
-bool SFE_UBLOX_GNSS::setNMEAGPVTGcallback(void (*callbackPointer)(NMEA_VTG_data_t, const void*))
+bool SFE_UBLOX_GNSS::setNMEAGPVTGcallback(void (*callbackPointer)(NMEA_VTG_data_t, void*))
 {
   if (storageNMEAGPVTG == NULL)
     initStorageNMEAGPVTG();     // Check that RAM has been allocated for the message
@@ -16091,7 +16091,7 @@ bool SFE_UBLOX_GNSS::setNMEAGPVTGcallback(void (*callbackPointer)(NMEA_VTG_data_
   return (true);
 }
 
-bool SFE_UBLOX_GNSS::setNMEAGPVTGcallbackPtr(void (*callbackPointerPtr)(NMEA_VTG_data_t *, const void*))
+bool SFE_UBLOX_GNSS::setNMEAGPVTGcallbackPtr(void (*callbackPointerPtr)(NMEA_VTG_data_t *, void*))
 {
   if (storageNMEAGPVTG == NULL)
     initStorageNMEAGPVTG();     // Check that RAM has been allocated for the message
@@ -16168,7 +16168,7 @@ uint8_t SFE_UBLOX_GNSS::getLatestNMEAGNVTG(NMEA_VTG_data_t *data)
   return (result);
 }
 
-bool SFE_UBLOX_GNSS::setNMEAGNVTGcallback(void (*callbackPointer)(NMEA_VTG_data_t, const void*))
+bool SFE_UBLOX_GNSS::setNMEAGNVTGcallback(void (*callbackPointer)(NMEA_VTG_data_t, void*))
 {
   if (storageNMEAGNVTG == NULL)
     initStorageNMEAGNVTG();     // Check that RAM has been allocated for the message
@@ -16193,7 +16193,7 @@ bool SFE_UBLOX_GNSS::setNMEAGNVTGcallback(void (*callbackPointer)(NMEA_VTG_data_
   return (true);
 }
 
-bool SFE_UBLOX_GNSS::setNMEAGNVTGcallbackPtr(void (*callbackPointerPtr)(NMEA_VTG_data_t *, const void*))
+bool SFE_UBLOX_GNSS::setNMEAGNVTGcallbackPtr(void (*callbackPointerPtr)(NMEA_VTG_data_t *, void*))
 {
   if (storageNMEAGNVTG == NULL)
     initStorageNMEAGNVTG();     // Check that RAM has been allocated for the message
@@ -16277,7 +16277,7 @@ uint8_t SFE_UBLOX_GNSS::getLatestNMEAGPRMC(NMEA_RMC_data_t *data)
 }
 
 // Enable a callback on the arrival of a GPRMC message
-bool SFE_UBLOX_GNSS::setNMEAGPRMCcallback(void (*callbackPointer)(NMEA_RMC_data_t, const void*))
+bool SFE_UBLOX_GNSS::setNMEAGPRMCcallback(void (*callbackPointer)(NMEA_RMC_data_t, void*))
 {
   if (storageNMEAGPRMC == NULL)
     initStorageNMEAGPRMC();     // Check that RAM has been allocated for the message
@@ -16302,7 +16302,7 @@ bool SFE_UBLOX_GNSS::setNMEAGPRMCcallback(void (*callbackPointer)(NMEA_RMC_data_
   return (true);
 }
 
-bool SFE_UBLOX_GNSS::setNMEAGPRMCcallbackPtr(void (*callbackPointerPtr)(NMEA_RMC_data_t *, const void*))
+bool SFE_UBLOX_GNSS::setNMEAGPRMCcallbackPtr(void (*callbackPointerPtr)(NMEA_RMC_data_t *, void*))
 {
   if (storageNMEAGPRMC == NULL)
     initStorageNMEAGPRMC();     // Check that RAM has been allocated for the message
@@ -16379,7 +16379,7 @@ uint8_t SFE_UBLOX_GNSS::getLatestNMEAGNRMC(NMEA_RMC_data_t *data)
   return (result);
 }
 
-bool SFE_UBLOX_GNSS::setNMEAGNRMCcallback(void (*callbackPointer)(NMEA_RMC_data_t, const void*))
+bool SFE_UBLOX_GNSS::setNMEAGNRMCcallback(void (*callbackPointer)(NMEA_RMC_data_t, void*))
 {
   if (storageNMEAGNRMC == NULL)
     initStorageNMEAGNRMC();     // Check that RAM has been allocated for the message
@@ -16404,7 +16404,7 @@ bool SFE_UBLOX_GNSS::setNMEAGNRMCcallback(void (*callbackPointer)(NMEA_RMC_data_
   return (true);
 }
 
-bool SFE_UBLOX_GNSS::setNMEAGNRMCcallbackPtr(void (*callbackPointerPtr)(NMEA_RMC_data_t *, const void*))
+bool SFE_UBLOX_GNSS::setNMEAGNRMCcallbackPtr(void (*callbackPointerPtr)(NMEA_RMC_data_t *, void*))
 {
   if (storageNMEAGNRMC == NULL)
     initStorageNMEAGNRMC();     // Check that RAM has been allocated for the message
@@ -16488,7 +16488,7 @@ uint8_t SFE_UBLOX_GNSS::getLatestNMEAGPZDA(NMEA_ZDA_data_t *data)
 }
 
 // Enable a callback on the arrival of a GPZDA message
-bool SFE_UBLOX_GNSS::setNMEAGPZDAcallback(void (*callbackPointer)(NMEA_ZDA_data_t, const void*))
+bool SFE_UBLOX_GNSS::setNMEAGPZDAcallback(void (*callbackPointer)(NMEA_ZDA_data_t, void*))
 {
   if (storageNMEAGPZDA == NULL)
     initStorageNMEAGPZDA();     // Check that RAM has been allocated for the message
@@ -16513,7 +16513,7 @@ bool SFE_UBLOX_GNSS::setNMEAGPZDAcallback(void (*callbackPointer)(NMEA_ZDA_data_
   return (true);
 }
 
-bool SFE_UBLOX_GNSS::setNMEAGPZDAcallbackPtr(void (*callbackPointerPtr)(NMEA_ZDA_data_t *, const void*))
+bool SFE_UBLOX_GNSS::setNMEAGPZDAcallbackPtr(void (*callbackPointerPtr)(NMEA_ZDA_data_t *, void*))
 {
   if (storageNMEAGPZDA == NULL)
     initStorageNMEAGPZDA();     // Check that RAM has been allocated for the message
@@ -16590,7 +16590,7 @@ uint8_t SFE_UBLOX_GNSS::getLatestNMEAGNZDA(NMEA_ZDA_data_t *data)
   return (result);
 }
 
-bool SFE_UBLOX_GNSS::setNMEAGNZDAcallback(void (*callbackPointer)(NMEA_ZDA_data_t, const void*))
+bool SFE_UBLOX_GNSS::setNMEAGNZDAcallback(void (*callbackPointer)(NMEA_ZDA_data_t, void*))
 {
   if (storageNMEAGNZDA == NULL)
     initStorageNMEAGNZDA();     // Check that RAM has been allocated for the message
@@ -16615,7 +16615,7 @@ bool SFE_UBLOX_GNSS::setNMEAGNZDAcallback(void (*callbackPointer)(NMEA_ZDA_data_
   return (true);
 }
 
-bool SFE_UBLOX_GNSS::setNMEAGNZDAcallbackPtr(void (*callbackPointerPtr)(NMEA_ZDA_data_t *, const void*))
+bool SFE_UBLOX_GNSS::setNMEAGNZDAcallbackPtr(void (*callbackPointerPtr)(NMEA_ZDA_data_t *, void*))
 {
   if (storageNMEAGNZDA == NULL)
     initStorageNMEAGNZDA();     // Check that RAM has been allocated for the message
@@ -18459,7 +18459,7 @@ int8_t SFE_UBLOX_GNSS::extractSignedChar(ubxPacket *msg, uint16_t spotToStart)
 }
 
 
-void SFE_UBLOX_GNSS::setCallbackUserContext(const void* userCtx)
+void SFE_UBLOX_GNSS::setCallbackUserContext(void* userCtx)
 {
   _callbackUserContext = userCtx;
 }
