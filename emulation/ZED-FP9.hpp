@@ -6,7 +6,7 @@ namespace emulation
 
 #define CAT_FIELDS(MSB, LSB) ((MSB << 8) + LSB)
 
-template <size_t CAP>
+template<typename T, size_t CAP>
 struct Buffer
 {
   enum Mode
@@ -15,33 +15,49 @@ struct Buffer
     RING,
   };
 
-  Buffer(Mode mode=LINEAR)
+  Buffer(Mode mode=RING)
   {
     m_mode = mode;
   }
 
-  void push_back(uint8_t b)
+  void push_back(const T& e)
   {
     if (m_mode == LINEAR && m_size < CAP - 1)
     {
-      m_buffer[m_left_ptr++] = b;
+      m_elements[m_writer++] = e;
       m_size++;
     }
     else if (m_mode == RING)
     {
-      
+	    m_elements[m_writer] = e;
+	    m_writer = (m_writer + 1) % CAP;
+	    
+	    if (m_size >= CAP)
+	    {
+	      m_reader = (m_reader + 1) % CAP;      
+	    }
     }
+  }
+
+  bool pop_front(T& e_out)
+  {
+    if (m_size == 0) { return false; }
+
+    e_out = m_elements[m_reader++];
+    m_size--;  
+
+    return true;
   }
 
   size_t size() const { return m_size; }
 
-  uint8_t& operator[](unsigned i) { return m_buffer[i]; }
+  T& operator[](unsigned i) { return m_elements[i]; }
 
-  uint8_t* data() { return m_buffer; }
+  T* data() { return m_elements; }
 
   Mode m_mode;
-  uint8_t m_buffer[CAP];
-  size_t m_left_ptr = 0, m_right_ptr = 0;
+  T m_elements[CAP];
+  size_t m_writer = 0, m_reader = 0;
   size_t m_size = 0;
 };
 
@@ -88,7 +104,7 @@ struct UbloxPacket
 	} __attribute__((packed));
 
 	Header header;
-	Buffer<256> payload;
+	Buffer<uint8_t, 128> payload;
 	Footer footer;
 
 	void compute_checksums(uint8_t& checksumA, uint8_t& checksumB) const
@@ -115,6 +131,11 @@ struct UbloxPacket
 		}
 	}
 
+	size_t size() const
+	{
+		return sizeof(header) + sizeof(footer) + payload.size();
+	}
+
 	bool is_valid() const
 	{
 		uint8_t a, b;
@@ -128,25 +149,62 @@ struct UbloxPacket
 		return CAT_FIELDS(header.cls, header.id);
 	}
 
-	static UbloxPacket read_from_stream(Stream& stream)
+	static bool read_from_stream(Stream& stream, UbloxPacket& out)
 	{
-		UbloxPacket packet;
 		// read(fd, &packet.header, sizeof(packet.header));
-		read_buffer_ok(stream, (uint8_t*)&packet.header, sizeof(packet.header));
-		// packet.payload.reserve(packet.header.len);
-		read_buffer_ok(stream, packet.payload.data(), packet.header.len);
-		read_buffer_ok(stream, (uint8_t*)&packet.footer, sizeof(footer));
+		if (!read_buffer_ok(stream, (uint8_t*)&out.header, sizeof(out.header))) { return false; }
+		// out.payload.reserve(out.header.len);
+		if (!read_buffer_ok(stream, out.payload.data(), out.header.len)) { return false; }
+		if (!read_buffer_ok(stream, (uint8_t*)&out.footer, sizeof(out.footer))) { return false; }
 
-		return packet;
+		return true;
 	}
 };
 
-
 struct ZED_FP9
 {
-	void service(Stream& stream)
+	void service_receive(Stream& stream, size_t bytes)
 	{
-		process_packet(stream, UbloxPacket::read_from_stream(stream));
+    if (bytes == 1)
+    { // we are being addressed first
+      m_current_register = stream.read();
+
+      Serial.print("Selected reg: "); Serial.println(m_current_register, HEX);
+    }
+    else
+    {
+      uint8_t rx_buf[128];
+      
+      uint8_t* s_ptr = rx_buf;
+      uint8_t* r_ptr = rx_buf;
+      while ((r_ptr - s_ptr) < bytes)
+      {
+        r_ptr += Wire.readBytes(r_ptr, bytes);
+      }
+
+      for (unsigned i = 0; i < bytes; i++)
+      {
+        Serial.print(rx_buf[i], HEX); Serial.print(" ");
+      } Serial.println();
+    }
+
+	}
+
+	void service_request(Stream& stream)
+	{
+		switch(m_current_register)
+		{
+			case 0xFD:
+			{
+				uint16_t size = 0;
+				for (unsigned i = 0; i < m_tx_queue.size(); i++)
+				{
+					size += m_tx_queue[i].size();          
+				}
+        stream.write((uint8_t*)&size, sizeof(size));
+        Serial.print("Responding with size: "); Serial.println(size);
+			} break;
+		}
 	}
 
 private:
@@ -162,6 +220,8 @@ private:
 	}
 
 	//std::queue<UbloxPacket> m_packet_queue;
+  Buffer<UbloxPacket, 3> m_tx_queue;
+  uint8_t m_current_register;
 };
 
 } // namespace emulation
