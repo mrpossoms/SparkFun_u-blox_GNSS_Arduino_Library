@@ -3,8 +3,7 @@
 
 #define ZED_FP9_ADDR 0x42
 
-static emulation::ZED_FP9 rtk;
-
+static emulation::ZED_FP9 rtk(ZED_FP9_ADDR);
 
 void handle_request()
 {
@@ -38,7 +37,7 @@ void setup()
 int itr = 0;
 void loop()
 {
-  delay(1000);
-  Serial.print(".");
+  delay(10);
+  rtk.update(millis());
   digitalWrite(13, itr++ & 1);
 }

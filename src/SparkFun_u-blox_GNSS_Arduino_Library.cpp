@@ -4998,7 +4998,6 @@ sfe_ublox_status_e SFE_UBLOX_GNSS::waitForACKResponse(ubxPacket *outgoingUBX, ui
   {
     if (checkUbloxInternal(outgoingUBX, requestedClass, requestedID) == true) // See if new data is available. Process bytes as they come in.
     {
-      Serial.print(".");
       // If both the outgoingUBX->classAndIDmatch and packetAck.classAndIDmatch are VALID
       // and outgoingUBX->valid is _still_ VALID and the class and ID _still_ match
       // then we can be confident that the data in outgoingUBX is valid
@@ -13884,7 +13883,7 @@ bool SFE_UBLOX_GNSS::getPortSettingsInternal(uint8_t portID, uint16_t maxWait)
   // The data is parsed as part of processing the response
   sfe_ublox_status_e result = sendCommand(&packetCfg, maxWait);
   bool retVal = false;
-
+//SFE_UBLOX_STATUS_DATA_SENT
   if (result == SFE_UBLOX_STATUS_DATA_RECEIVED)
   {
     Serial.println("SFE_UBLOX_STATUS_DATA_RECEIVED");
@@ -16721,7 +16720,10 @@ bool SFE_UBLOX_GNSS::setNavigationFrequency(uint8_t navFreq, uint16_t maxWait)
 
   // This will load the payloadCfg array with current settings of the given register
   if (sendCommand(&packetCfg, maxWait) != SFE_UBLOX_STATUS_DATA_RECEIVED) // We are expecting data and an ACK
+  {
+    Serial.println("Failed to get current rate settings");
     return (false);                                                       // If command send fails then bail
+  }
 
   uint16_t measurementRate = 1000 / navFreq;
 
