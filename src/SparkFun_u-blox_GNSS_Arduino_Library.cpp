@@ -928,8 +928,16 @@ bool SFE_UBLOX_GNSS::isConnected(uint16_t maxWait)
   {
     _i2cPort->beginTransmission((uint8_t)_gpsI2Caddress);
     if (_i2cPort->endTransmission() != 0)
+    {
+      Serial.println("sensor did not ack");
       return false; // Sensor did not ack
+    }
+    else
+    {
+      Serial.println("sensor ack");
+    }
   }
+
 
   // Query port configuration to see whether we get a meaningful response
   // We could simply request the config for any port but, just for giggles, let's request the config for most appropriate port
@@ -1097,6 +1105,7 @@ bool SFE_UBLOX_GNSS::checkUbloxI2C(ubxPacket *incomingUBX, uint8_t requestedClas
     {
       uint8_t msb = _i2cPort->read();
       uint8_t lsb = _i2cPort->read();
+
       // if (lsb == 0xFF)
       // {
       //   //I believe this is a u-blox bug. Device should never present an 0xFF.
@@ -1246,11 +1255,17 @@ bool SFE_UBLOX_GNSS::checkUbloxI2C(ubxPacket *incomingUBX, uint8_t requestedClas
           //    }
           //  }
 
+          Serial.print(incoming, HEX); Serial.print(" ");
           process(incoming, incomingUBX, requestedClass, requestedID); // Process this valid character
         }
+
+        Serial.println();
       }
       else
+      {
+        _debugSerial->println(F("checkUbloxI2C: Sensor did not respond "));
         return (false); // Sensor did not respond
+      }
 
       bytesAvailable -= bytesToRead;
     }
@@ -4983,6 +4998,7 @@ sfe_ublox_status_e SFE_UBLOX_GNSS::waitForACKResponse(ubxPacket *outgoingUBX, ui
   {
     if (checkUbloxInternal(outgoingUBX, requestedClass, requestedID) == true) // See if new data is available. Process bytes as they come in.
     {
+      Serial.print(".");
       // If both the outgoingUBX->classAndIDmatch and packetAck.classAndIDmatch are VALID
       // and outgoingUBX->valid is _still_ VALID and the class and ID _still_ match
       // then we can be confident that the data in outgoingUBX is valid
@@ -13864,16 +13880,27 @@ bool SFE_UBLOX_GNSS::getPortSettingsInternal(uint8_t portID, uint16_t maxWait)
   packetCfg.startingSpot = 0;
 
   payloadCfg[0] = portID;
-
+  Serial.println("getPortSettingsInternal: sendCommand");
   // The data is parsed as part of processing the response
   sfe_ublox_status_e result = sendCommand(&packetCfg, maxWait);
   bool retVal = false;
 
   if (result == SFE_UBLOX_STATUS_DATA_RECEIVED)
+  {
+    Serial.println("SFE_UBLOX_STATUS_DATA_RECEIVED");
     retVal = true;
+  }
 
   if (result == SFE_UBLOX_STATUS_DATA_OVERWRITTEN)
+  {
+    Serial.println("SFE_UBLOX_STATUS_DATA_OVERWRITTEN");
     retVal = true;
+  }
+
+  if (SFE_UBLOX_STATUS_SUCCESS == result)
+  {
+    Serial.println("SFE_UBLOX_STATUS_SUCCESS");
+  }
 
   // Now disable automatic support for CFG-PRT (see above)
   delete packetUBXCFGPRT;
