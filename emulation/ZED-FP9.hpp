@@ -20,16 +20,17 @@ struct Buffer
 		m_mode = mode;
 	}
 
-	void push_back(const T& e)
+	T* push_back()
 	{
 		if (m_mode == LINEAR && m_size < CAP - 1)
 		{
-			m_elements[m_writer++] = e;
+			auto ptr_out = &m_elements[m_writer++];
 			m_size++;
+			return ptr_out;
 		}
 		else if (m_mode == RING)
 		{
-			m_elements[m_writer] = e;
+			auto ptr_out = &m_elements[m_writer];
 			m_writer = (m_writer + 1) % CAP;
 			
 			if (m_size >= CAP)
@@ -40,8 +41,12 @@ struct Buffer
 			{
 				m_size++;
 			}
+
+			return ptr_out;
 		}
 	}
+
+
 
 	bool peek_front(T& e_out)
 	{
@@ -51,6 +56,12 @@ struct Buffer
 		return true;
 	}
 
+	T* peek_front()
+	{
+		if (m_size == 0) { return nullptr; }
+
+		return m_elements + m_reader;
+	}
 
 	bool pop_front(T& e_out)
 	{
@@ -67,11 +78,43 @@ struct Buffer
 		return false;
 	}
 
+	bool pop_front()
+	{
+		if (m_mode == RING)
+		{
+			if (m_size == 0) { return false; }
+			m_reader = (m_reader + 1) % CAP;
+			m_size--;  
+
+			return true;  		
+		}
+
+		return false;
+	}
+
 	size_t size() const { return m_size; }
 
 	T& operator[](unsigned i) { return m_elements[(m_reader + i) % CAP]; }
 
 	T* data() { return m_elements + m_reader; }
+
+	bool resize(size_t new_size)
+	{
+		if (new_size > CAP) { return false; }
+
+		m_reader = 0;
+		m_writer = new_size;
+		m_size = new_size;
+		return true;
+	}
+
+	void clear()
+	{
+		m_size = 0;
+		m_reader = 0;
+		m_writer = 0;
+	}
+
 
 	Mode m_mode;
 	T m_elements[CAP];
@@ -113,7 +156,7 @@ struct UbloxPacket
 	};
 
 	Header header;
-	Buffer<uint8_t, 128> payload;
+	Buffer<uint8_t, 92> payload;
 	Footer footer;
 
 	void compute_checksums(uint8_t& checksumA, uint8_t& checksumB) const
@@ -144,17 +187,17 @@ struct UbloxPacket
 	{
 			for (unsigned i = 0; i < sizeof(header); i++)
 			{ // print header
-				Serial.print(((uint8_t*)&header)[i], HEX); Serial.print(" ");
+				Serial.print(((uint8_t*)&header)[i], HEX); Serial.print(F(" "));
 			}
 
 			for (unsigned i = 0; i < header.len; i++)
 			{ // print payload
-				Serial.print(payload[i], HEX); Serial.print(" ");
+				Serial.print(payload[i], HEX); Serial.print(F(" "));
 			}
 
 			for (unsigned i = 0; i < sizeof(footer); i++)
 			{ // print footer
-				Serial.print(((uint8_t*)&footer)[i], HEX); Serial.print(" ");
+				Serial.print(((uint8_t*)&footer)[i], HEX); Serial.print(F(" "));
 			}
 			Serial.println();
 	}
@@ -182,15 +225,15 @@ struct UbloxPacket
 	{
 		uint8_t* w_ptr = (uint8_t*)&p;
 
-		Serial.print("pushing payload buffer of: "); Serial.println(sizeof(p));
+		Serial.print(F("pushing payload buffer of: ")); Serial.println(sizeof(p));
 
 		for (unsigned i = 0; i < sizeof(p); i++)
 		{
-			Serial.print(*w_ptr, HEX); Serial.print(" ");
-			payload.push_back(*w_ptr++);
+			Serial.print(*w_ptr, HEX); Serial.print(F(" "));
+			*payload.push_back() = *w_ptr++;
 		} Serial.println();
 
-		Serial.print("Final size: "); Serial.println(payload.size(), DEC);
+		Serial.print(F("Final size: ")); Serial.println(payload.size(), DEC);
 	}
 
 	static bool read_from_stream(Stream& stream, UbloxPacket& out)
@@ -200,6 +243,12 @@ struct UbloxPacket
 		uint8_t footer[8];
 		// read(fd, &packet.header, sizeof(packet.header));
 		if (!read_buffer_ok(stream, (uint8_t*)&out.header, sizeof(out.header))) { return false; }
+		
+		if (!out.payload.resize(out.header.len))
+		{
+			Serial.println(F("Failed to resize payload buffer"));
+			return false;
+		}
 		if (!read_buffer_ok(stream, out.payload.data(), out.header.len)) { return false; }
 		if (!read_buffer_ok(stream, (uint8_t*)&out.footer, sizeof(out.footer))) { return false; }
 
@@ -239,67 +288,73 @@ struct ZED_FP9
 
 	void service_receive(Stream& stream, size_t bytes)
 	{
+		auto us_now = micros();
 		if (bytes == 1)
 		{ // we are being addressed first
 			m_current_register = stream.read();
 
-			Serial.print("Selected reg: "); Serial.println(m_current_register, HEX);
+			Serial.print(F("Selected reg: ")); Serial.println(m_current_register, HEX);
 		}
 		else if (bytes > 0)
 		{
-			UbloxPacket rx_packet;
-
-			if (UbloxPacket::read_from_stream(stream, rx_packet))
+			if (UbloxPacket::read_from_stream(stream, m_rx_packet))
 			{
-				rx_packet.print();
-				process_packet(stream, rx_packet);
+				m_rx_packet.print();
+				process_packet(stream, m_rx_packet);
 			}
 			else
 			{
-
+				Serial.println(F("Failed to read packet"));
+				exit(0);
 			}
 		}
-
+		Serial.print(F("service_receive took: ")); Serial.print((micros() - us_now)/1000.0); Serial.println(F("ms"));
 	}
 
 	void service_request(Stream& stream)
 	{
+		auto us_now = micros();
 		switch(m_current_register)
 		{
 			case 0xFD:
 			{
 				uint16_t size = 0;
 
-				UbloxPacket to_send;
-				if (m_tx_queue.peek_front(to_send))
-				{
-					size = to_send.size();
-				}
-				// for (unsigned i = 0; i < m_tx_queue.size(); i++)
+				// auto front_ptr = m_tx_queue.peek_front();
+				// if (front_ptr)
 				// {
-				// 	size += m_tx_queue[i].size();          
+				// 	size = front_ptr->size();
 				// }
-				Serial.print("Responding with size: "); Serial.println(size);
+
+				for (unsigned i = 0; i < m_tx_queue.size(); i++)
+				{
+					size += m_tx_queue[i].size();          
+				}
+				Serial.print(F("Responding with size: ")); Serial.print(size); Serial.println(F(" bytes"));
 				stream.write(((uint8_t*)&size)[1]);
 				stream.write(((uint8_t*)&size)[0]);
 				m_current_register = 0;
 			} break;
 			default:
 			{
-					UbloxPacket tx_packet;
-					Serial.print("tx_queue size: "); Serial.println(m_tx_queue.size());
+					Serial.print(F("tx_queue size: ")); Serial.print(m_tx_queue.size()); Serial.println(F(" msgs"));
+					
 
-					if(m_tx_queue.pop_front(tx_packet))
+					while
+					// if
+					(m_tx_queue.size() > 0)
 					{
-						transmit_packet(stream, tx_packet);
+						transmit_packet(stream, m_tx_queue.peek_front());
+						m_tx_queue.pop_front();
 					}
 
 					if(m_tx_queue.size() == 0)
 					{
-						Serial.println("tx_queue empty");
+						Serial.println(F("tx_queue empty"));
 					}
 			} break;
 		}
+		Serial.print(F("Service request took: ")); Serial.print((micros() - us_now)/1000.0); Serial.println(F("ms"));
 	}
 
 	void update(unsigned time_ms)
@@ -309,75 +364,77 @@ struct ZED_FP9
 			m_last_pvt_time = time_ms;
 			if (m_auto_pvt)
 			{
-				UbloxPacket msg = make_msg(UBX_CLASS_NAV, UBX_NAV_PVT, sizeof(UBX_NAV_PVT_data_t));
-				msg.push_payload<>(UBX_NAV_PVT_data_t{});
-				m_tx_queue.push_back(msg);
+				noInterrupts();
+				UbloxPacket* msg = enqueue_msg(UBX_CLASS_NAV, UBX_NAV_PVT, sizeof(UBX_NAV_PVT_data_t));
+				msg->push_payload<>(UBX_NAV_PVT_data_t{});
+				msg->compute_checksums(msg->footer.checksumA, msg->footer.checksumB);
 				m_last_pvt_time = time_ms;
+				interrupts();
 			}
 		}
 	}
 
 private:
-	UbloxPacket make_cfg_prt_i2c()
+	UbloxPacket* enqueue_cfg_prt_i2c()
 	{
-		UbloxPacket cfg_prt_i2c;
-		cfg_prt_i2c.header.sync[0] = UBX_SYNCH_1;
-		cfg_prt_i2c.header.sync[1] = UBX_SYNCH_2;
-		cfg_prt_i2c.header.cls = UBX_CLASS_CFG;
-		cfg_prt_i2c.header.id = UBX_CFG_PRT;
-		cfg_prt_i2c.header.len = 20;
-
-		cfg_prt_i2c.push_payload<>(m_port_config);
-		cfg_prt_i2c.compute_checksums(cfg_prt_i2c.footer.checksumA, cfg_prt_i2c.footer.checksumB);
+		UbloxPacket* cfg_prt_i2c = enqueue_msg(UBX_CLASS_CFG, UBX_CFG_PRT, 20);
+		cfg_prt_i2c->push_payload<>(m_port_config);
+		cfg_prt_i2c->compute_checksums(cfg_prt_i2c->footer.checksumA, cfg_prt_i2c->footer.checksumB);
 
 		return cfg_prt_i2c;
 	}
 
-	UbloxPacket make_ack(const UbloxPacket& ack_packet)
+	UbloxPacket* enqueue_ack(const UbloxPacket& ack_packet)
 	{
-		UbloxPacket ack = make_msg(UBX_CLASS_ACK, UBX_ACK_ACK, 2);
-		ack.payload.push_back(ack_packet.header.cls);
-		ack.payload.push_back(ack_packet.header.id);
-		ack.compute_checksums(ack.footer.checksumA, ack.footer.checksumB);
+
+		UbloxPacket* ack = enqueue_msg(UBX_CLASS_ACK, UBX_ACK_ACK, 2);
+		*ack->payload.push_back() = ack_packet.header.cls;
+		*ack->payload.push_back() = ack_packet.header.id;
+		ack->compute_checksums(ack->footer.checksumA, ack->footer.checksumB);
 
 		return ack;
 	}
 
-	UbloxPacket make_nack(const UbloxPacket& nack_packet)
+	UbloxPacket* enqueue_nack(const UbloxPacket& nack_packet)
 	{
-		UbloxPacket nack = make_msg(UBX_CLASS_ACK, UBX_ACK_NACK, 2);
-		nack.payload.push_back(nack_packet.header.cls);
-		nack.payload.push_back(nack_packet.header.id);
-		nack.compute_checksums(nack.footer.checksumA, nack.footer.checksumB);
+		UbloxPacket* nack = enqueue_msg(UBX_CLASS_ACK, UBX_ACK_NACK, 2);
+		*nack->payload.push_back() = nack_packet.header.cls;
+		*nack->payload.push_back() = nack_packet.header.id;
+		nack->compute_checksums(nack->footer.checksumA, nack->footer.checksumB);
 
 		return nack;
 	}
 
-	UbloxPacket make_msg(uint8_t cls, uint8_t id, uint16_t len)
+	UbloxPacket* enqueue_msg(uint8_t cls, uint8_t id, uint16_t len)
 	{
-		UbloxPacket msg;
-		msg.header.sync[0] = UBX_SYNCH_1;
-		msg.header.sync[1] = UBX_SYNCH_2;
-		msg.header.cls = cls;
-		msg.header.id = id;
-		msg.header.len = len;
+		UbloxPacket* msg = m_tx_queue.push_back();
+		msg->header.sync[0] = UBX_SYNCH_1;
+		msg->header.sync[1] = UBX_SYNCH_2;
+		msg->header.cls = cls;
+		msg->header.id = id;
+		msg->header.len = len;
+
+		msg->payload.clear();
 
 		return msg;
 	}
 
-	static void transmit_packet(Stream& stream, UbloxPacket& packet)
+	static void transmit_packet(Stream& stream, UbloxPacket* packet)
 	{
-		Serial.println("Transmitting packet:");
-		packet.print();
+		//Serial.println(F("Transmitting packet:"));
+		//packet->print();
 
-		packet.compute_checksums(packet.footer.checksumA, packet.footer.checksumB);
-		stream.write((uint8_t*)&packet.header, sizeof(packet.header));
-		for (unsigned i = 0; i < packet.header.len; i++)
-		{
-			stream.write(packet.payload[i]);
-		}
-		// stream.write(packet.payload.data(), packet.header.len);
-		stream.write((uint8_t*)&packet.footer, sizeof(packet.footer));
+		stream.write((uint8_t*)&packet->header, sizeof(packet->header));
+		stream.write(packet->payload.data(), packet->header.len);
+		// for (unsigned i = 0; i < packet->header.len; i++)
+		// {
+		// 	if (1 != stream.write(packet->payload[i]))
+    //   {
+    //     Serial.println(F("I2C: write failed"));
+    //   }
+		// }
+		// stream.write(packet->payload.data(), packet->header.len);
+		stream.write((uint8_t*)&packet->footer, sizeof(packet->footer));
 	}
 
 	void process_cfg_nav(const UbloxPacket& packet)
@@ -389,6 +446,7 @@ private:
 			case UBX_NAV_PVT:
 				m_rate_config.navRate = packet.payload[2];
 				m_auto_pvt = true;
+				// enqueue_ack(packet);
 				break;
 			default:
 				break;
@@ -401,32 +459,33 @@ private:
 		{
 			case UBX_CFG_PRT:
 			{
-				Serial.println("::: config port");
+				Serial.println(F("::: UBX_CFG_PRT"));
 
 				if (packet.header.len == 1)
 				{ // this is a polling packet, so respond with the current config
-					Serial.println("Sending master port config");
-					m_tx_queue.push_back(make_ack(packet));
-					m_tx_queue.push_back(make_cfg_prt_i2c());
+					Serial.println(F("Sending master port config"));
+					enqueue_cfg_prt_i2c();
+					enqueue_ack(packet);
 				}
 				else if(packet.header.len == sizeof(UBX_CFG_PRT_data_t))
 				{
-					Serial.println("setting new port config");
+					Serial.println(F("setting new port config"));
 					// this is a config packet, so store the new config
 					UBX_CFG_PRT_data_t* cfg = (UBX_CFG_PRT_data_t*)packet.payload.data();
 					m_port_config = *cfg;
-					m_tx_queue.push_back(make_ack(packet));
+					enqueue_ack(packet);
 				}
 				else
 				{ // this is an invalid packet, so send a NACK
-					m_tx_queue.push_back(make_nack(packet));
+					enqueue_nack(packet);
 				}
 
 			} break;
 
+
 			case UBX_CFG_MSG:
 			{
-				Serial.println("::: config message rate");
+				Serial.println(F("::: UBX_CFG_MSG"));
 
 				if(packet.header.len == 3)
 				{
@@ -443,42 +502,48 @@ private:
 							break;
 					}
 
-					Serial.print("message rate set to: "); Serial.println(m_message_rate);
+					Serial.print(F("message rate set to: ")); Serial.println(m_message_rate);
 
-					m_tx_queue.push_back(make_ack(packet));
+					enqueue_ack(packet);
 				}
 				else
 				{
-					m_tx_queue.push_back(make_nack(packet));
+					enqueue_nack(packet);
 				}
 			} break;
 
+
 			case UBX_CFG_RATE:
 			{
-				Serial.println("::: config navigation rate");
+				Serial.println(F("::: UBX_CFG_RATE"));
 
 				if(packet.header.len == 0)
 				{ // send back the current navigation rate
-					Serial.println("Sending current navigation rate");
-					UbloxPacket msg = make_msg(UBX_CLASS_CFG, UBX_CFG_RATE, sizeof(m_rate_config));
-					msg.push_payload<>(m_rate_config);
-					m_tx_queue.push_back(msg);
-					m_tx_queue.push_back(make_ack(packet));
+					Serial.println(F("Sending current navigation rate"));
+					UbloxPacket* msg = enqueue_msg(UBX_CLASS_CFG, UBX_CFG_RATE, sizeof(m_rate_config));
+					msg->push_payload<>(m_rate_config);
+					msg->compute_checksums(msg->footer.checksumA, msg->footer.checksumB);
+					
+					enqueue_ack(packet);
 				}
 				else if (packet.header.len == sizeof(UBX_CFG_RATE_data_t))
 				{
-					m_tx_queue.push_back(make_ack(packet));
-
 					m_rate_config = *(UBX_CFG_RATE_data_t*)packet.payload.data();
 
-					Serial.println("Set navigation rate rates to:");
-					Serial.print("measRate: "); Serial.println(m_rate_config.measRate);
-					Serial.print("navRate: "); Serial.println(m_rate_config.navRate);
-					Serial.print("timeRef: "); Serial.println(m_rate_config.timeRef);
+					Serial.println(F("Set navigation rate rates to:"));
+					Serial.print(F("measRate: ")); Serial.println(m_rate_config.measRate);
+					Serial.print(F("navRate: ")); Serial.println(m_rate_config.navRate);
+					Serial.print(F("timeRef: ")); Serial.println(m_rate_config.timeRef);
+
+					// UbloxPacket* msg = enqueue_msg(UBX_CLASS_CFG, UBX_CFG_RATE, sizeof(m_rate_config));
+					// msg->push_payload<>(m_rate_config);
+					// msg->compute_checksums(msg->footer.checksumA, msg->footer.checksumB);
+					
+					enqueue_ack(packet);
 				}
 				else
 				{
-					m_tx_queue.push_back(make_nack(packet));
+					enqueue_nack(packet);
 				}
 			} break;
 		}
@@ -500,6 +565,7 @@ private:
 	UBX_CFG_RATE_data_t m_rate_config = {};
 	uint8_t m_message_rate;
 
+	UbloxPacket m_rx_packet;
 	Buffer<UbloxPacket, 3> m_tx_queue;
 	uint8_t m_current_register;
 	uint8_t m_slave_address;

@@ -8,7 +8,7 @@ static emulation::ZED_FP9 rtk(ZED_FP9_ADDR);
 void handle_request()
 {
   Serial.println();
-  Serial.println("Request: ");
+  Serial.println("OUT >>>>>>>>>>>>");
 
   rtk.service_request(Wire);
 }
@@ -16,7 +16,7 @@ void handle_request()
 void handle_receive(int bytes_received)
 {
   Serial.println();
-  Serial.print("Received: "); Serial.println(bytes_received);
+  Serial.print("IN <<<<<<<<<<<<: "); Serial.println(bytes_received);
 
   rtk.service_receive(Wire, bytes_received);
 }

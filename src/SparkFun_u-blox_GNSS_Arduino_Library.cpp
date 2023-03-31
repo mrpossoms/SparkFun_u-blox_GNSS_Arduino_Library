@@ -1087,6 +1087,7 @@ bool SFE_UBLOX_GNSS::checkUbloxI2C(ubxPacket *incomingUBX, uint8_t requestedClas
 #endif
       return (false); // Sensor did not ACK
     }
+    delay(10);
 
     // Forcing requestFrom to use a restart would be unwise. If bytesAvailable is zero, we want to surrender the bus.
     uint8_t bytesReturned = _i2cPort->requestFrom((uint8_t)_gpsI2Caddress, static_cast<uint8_t>(2));
@@ -1141,6 +1142,9 @@ bool SFE_UBLOX_GNSS::checkUbloxI2C(ubxPacket *incomingUBX, uint8_t requestedClas
       //   return (false);
       // }
       bytesAvailable = (uint16_t)msb << 8 | lsb;
+
+        _debugSerial->print(F("checkUbloxI2C: I2C: requestFrom 0xFD returned "));
+        _debugSerial->println(bytesAvailable);
     }
 
     if (bytesAvailable == 0)
@@ -1219,6 +1223,7 @@ bool SFE_UBLOX_GNSS::checkUbloxI2C(ubxPacket *incomingUBX, uint8_t requestedClas
         bytesToRead = i2cTransactionSize;
 
       // TRY_AGAIN:
+      delay(10);
 
       // Here it would be desireable to use a restart where possible / supported, but only if there will be multiple reads.
       // However, if an individual requestFrom fails, we could end up leaving the bus hanging.
@@ -1263,7 +1268,8 @@ bool SFE_UBLOX_GNSS::checkUbloxI2C(ubxPacket *incomingUBX, uint8_t requestedClas
       }
       else
       {
-        _debugSerial->println(F("checkUbloxI2C: Sensor did not respond "));
+        _debugSerial->print(F("checkUbloxI2C: Sensor did not respond "));
+        Serial.println(bytesReturned);
         return (false); // Sensor did not respond
       }
 
