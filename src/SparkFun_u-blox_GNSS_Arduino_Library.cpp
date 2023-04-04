@@ -1260,7 +1260,7 @@ bool SFE_UBLOX_GNSS::checkUbloxI2C(ubxPacket *incomingUBX, uint8_t requestedClas
           //    }
           //  }
 
-          Serial.print(incoming, HEX); Serial.print(" ");
+          // Serial.print(incoming, HEX); Serial.print(" ");
           process(incoming, incomingUBX, requestedClass, requestedID); // Process this valid character
         }
 

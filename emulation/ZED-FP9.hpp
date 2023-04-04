@@ -320,16 +320,16 @@ struct ZED_FP9
 			{
 				uint16_t size = 0;
 
-				// auto front_ptr = m_tx_queue.peek_front();
-				// if (front_ptr)
-				// {
-				// 	size = front_ptr->size();
-				// }
-
-				for (unsigned i = 0; i < m_tx_queue.size(); i++)
+				auto front_ptr = m_tx_queue.peek_front();
+				if (front_ptr)
 				{
-					size += m_tx_queue[i].size();          
+					size = front_ptr->size();
 				}
+
+				// for (unsigned i = 0; i < m_tx_queue.size(); i++)
+				// {
+				// 	size += m_tx_queue[i].size();          
+				// }
 				Serial.print(F("Responding with size: ")); Serial.print(size); Serial.println(F(" bytes"));
 				stream.write(((uint8_t*)&size)[1]);
 				stream.write(((uint8_t*)&size)[0]);
@@ -340,8 +340,8 @@ struct ZED_FP9
 					Serial.print(F("tx_queue size: ")); Serial.print(m_tx_queue.size()); Serial.println(F(" msgs"));
 					
 
-					while
-					// if
+					// while
+					if
 					(m_tx_queue.size() > 0)
 					{
 						transmit_packet(stream, m_tx_queue.peek_front());
@@ -367,6 +367,16 @@ struct ZED_FP9
 				noInterrupts();
 				UbloxPacket* msg = enqueue_msg(UBX_CLASS_NAV, UBX_NAV_PVT, sizeof(UBX_NAV_PVT_data_t));
 				msg->push_payload<>(UBX_NAV_PVT_data_t{});
+				msg->compute_checksums(msg->footer.checksumA, msg->footer.checksumB);
+				m_last_pvt_time = time_ms;
+				interrupts();
+			}
+
+			if (m_auto_hp_pos)
+			{
+				noInterrupts();
+				UbloxPacket* msg = enqueue_msg(UBX_CLASS_NAV, UBX_NAV_HPPOSLLH, sizeof(UBX_NAV_HPPOSLLH_data_t));
+				msg->push_payload<>(UBX_NAV_HPPOSLLH_data_t{});
 				msg->compute_checksums(msg->footer.checksumA, msg->footer.checksumB);
 				m_last_pvt_time = time_ms;
 				interrupts();
@@ -445,9 +455,14 @@ private:
 		{
 			case UBX_NAV_PVT:
 				m_rate_config.navRate = packet.payload[2];
+				Serial.println(F("::: UBX_NAV_PVT"));
 				m_auto_pvt = true;
 				// enqueue_ack(packet);
 				break;
+			case UBX_NAV_HPPOSLLH:
+				Serial.println(F("::: UBX_NAV_HPPOSLLH"));
+				m_rate_config.navRate = packet.payload[2];
+				m_auto_hp_pos = true;
 			default:
 				break;
 		}
@@ -561,6 +576,8 @@ private:
 	}
 
 	bool m_auto_pvt = false; // automatically send PVT messages
+	bool m_auto_hp_pos = false; // automatically send HPPOSLLH messages
+
 	UBX_CFG_PRT_data_t m_port_config = {};
 	UBX_CFG_RATE_data_t m_rate_config = {};
 	uint8_t m_message_rate;
