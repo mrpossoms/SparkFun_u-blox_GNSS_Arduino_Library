@@ -28,6 +28,7 @@ void setup()
 
   Serial.begin(115200);
   Serial.println("ZED-FP9 Emulator");
+  Serial.print("Wire slave tx buf: "); Serial.println(BUFFER_LENGTH);
 
   Wire.onReceive(handle_receive);
   Wire.onRequest(handle_request);
@@ -37,7 +38,7 @@ void setup()
 int itr = 0;
 void loop()
 {
-  delay(10);
+  delay(1000);
   rtk.update(millis());
   digitalWrite(13, itr++ & 1);
 }

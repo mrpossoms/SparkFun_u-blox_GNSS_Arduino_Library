@@ -1223,7 +1223,6 @@ bool SFE_UBLOX_GNSS::checkUbloxI2C(ubxPacket *incomingUBX, uint8_t requestedClas
         bytesToRead = i2cTransactionSize;
 
       // TRY_AGAIN:
-      delay(10);
 
       // Here it would be desireable to use a restart where possible / supported, but only if there will be multiple reads.
       // However, if an individual requestFrom fails, we could end up leaving the bus hanging.

@@ -431,8 +431,8 @@ private:
 
 	static void transmit_packet(Stream& stream, UbloxPacket* packet)
 	{
-		//Serial.println(F("Transmitting packet:"));
-		//packet->print();
+		Serial.println(F("Transmitting packet:"));
+		packet->print();
 
 		stream.write((uint8_t*)&packet->header, sizeof(packet->header));
 		stream.write(packet->payload.data(), packet->header.len);
