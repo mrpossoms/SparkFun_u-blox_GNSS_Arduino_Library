@@ -928,8 +928,16 @@ bool SFE_UBLOX_GNSS::isConnected(uint16_t maxWait)
   {
     _i2cPort->beginTransmission((uint8_t)_gpsI2Caddress);
     if (_i2cPort->endTransmission() != 0)
+    {
+      Serial.println("sensor did not ack");
       return false; // Sensor did not ack
+    }
+    else
+    {
+      Serial.println("sensor ack");
+    }
   }
+
 
   // Query port configuration to see whether we get a meaningful response
   // We could simply request the config for any port but, just for giggles, let's request the config for most appropriate port
@@ -1079,6 +1087,7 @@ bool SFE_UBLOX_GNSS::checkUbloxI2C(ubxPacket *incomingUBX, uint8_t requestedClas
 #endif
       return (false); // Sensor did not ACK
     }
+    delay(10);
 
     // Forcing requestFrom to use a restart would be unwise. If bytesAvailable is zero, we want to surrender the bus.
     uint8_t bytesReturned = _i2cPort->requestFrom((uint8_t)_gpsI2Caddress, static_cast<uint8_t>(2));
@@ -1097,6 +1106,7 @@ bool SFE_UBLOX_GNSS::checkUbloxI2C(ubxPacket *incomingUBX, uint8_t requestedClas
     {
       uint8_t msb = _i2cPort->read();
       uint8_t lsb = _i2cPort->read();
+
       // if (lsb == 0xFF)
       // {
       //   //I believe this is a u-blox bug. Device should never present an 0xFF.
@@ -1132,6 +1142,9 @@ bool SFE_UBLOX_GNSS::checkUbloxI2C(ubxPacket *incomingUBX, uint8_t requestedClas
       //   return (false);
       // }
       bytesAvailable = (uint16_t)msb << 8 | lsb;
+
+        _debugSerial->print(F("checkUbloxI2C: I2C: requestFrom 0xFD returned "));
+        _debugSerial->println(bytesAvailable);
     }
 
     if (bytesAvailable == 0)
@@ -1246,11 +1259,18 @@ bool SFE_UBLOX_GNSS::checkUbloxI2C(ubxPacket *incomingUBX, uint8_t requestedClas
           //    }
           //  }
 
+          // Serial.print(incoming, HEX); Serial.print(" ");
           process(incoming, incomingUBX, requestedClass, requestedID); // Process this valid character
         }
+
+        Serial.println();
       }
       else
+      {
+        _debugSerial->print(F("checkUbloxI2C: Sensor did not respond "));
+        Serial.println(bytesReturned);
         return (false); // Sensor did not respond
+      }
 
       bytesAvailable -= bytesToRead;
     }
@@ -13864,16 +13884,27 @@ bool SFE_UBLOX_GNSS::getPortSettingsInternal(uint8_t portID, uint16_t maxWait)
   packetCfg.startingSpot = 0;
 
   payloadCfg[0] = portID;
-
+  Serial.println("getPortSettingsInternal: sendCommand");
   // The data is parsed as part of processing the response
   sfe_ublox_status_e result = sendCommand(&packetCfg, maxWait);
   bool retVal = false;
-
+//SFE_UBLOX_STATUS_DATA_SENT
   if (result == SFE_UBLOX_STATUS_DATA_RECEIVED)
+  {
+    Serial.println("SFE_UBLOX_STATUS_DATA_RECEIVED");
     retVal = true;
+  }
 
   if (result == SFE_UBLOX_STATUS_DATA_OVERWRITTEN)
+  {
+    Serial.println("SFE_UBLOX_STATUS_DATA_OVERWRITTEN");
     retVal = true;
+  }
+
+  if (SFE_UBLOX_STATUS_SUCCESS == result)
+  {
+    Serial.println("SFE_UBLOX_STATUS_SUCCESS");
+  }
 
   // Now disable automatic support for CFG-PRT (see above)
   delete packetUBXCFGPRT;
@@ -16694,7 +16725,10 @@ bool SFE_UBLOX_GNSS::setNavigationFrequency(uint8_t navFreq, uint16_t maxWait)
 
   // This will load the payloadCfg array with current settings of the given register
   if (sendCommand(&packetCfg, maxWait) != SFE_UBLOX_STATUS_DATA_RECEIVED) // We are expecting data and an ACK
+  {
+    Serial.println("Failed to get current rate settings");
     return (false);                                                       // If command send fails then bail
+  }
 
   uint16_t measurementRate = 1000 / navFreq;
 
